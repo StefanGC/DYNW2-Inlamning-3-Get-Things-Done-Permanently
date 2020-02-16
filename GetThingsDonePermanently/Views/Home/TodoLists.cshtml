@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Todo Lista";
+}
+
+<h1 class="text-primary">@ViewData["Title"]</h1>
+<br />
+
+
+<div class="row" style="margin-top:20px;">
+    <div class="col">
+        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <input type="hidden" id="userId" value="@UserManager.GetUserId(User)">
+            }
+            <input type="text" id="add-name" placeholder="Ange namn">
+            <input type="text" id="add-description" placeholder="Ange beskrivning">
+            <input type="submit" class="btn btn-primary" value="Lägga till en ny lista">
+        </form>
+
+        <div id="editForm" style="display:none">
+            <h3 class="text-primary">Uppdatera listdetaljer</h3>
+            <form action="javascript:void(0);" onsubmit="updateItem()">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-name">
+                <input type="text" id="edit-description">
+                <input type="submit" class="btn btn-success" value="Spara">
+                <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+            </form>
+        </div>
+
+        <div id="editFormTodoItems" style="display:none">
+            <h3 class="text-primary">Uppdatera uppgiftdetaljer</h3>
+            <form action="javascript:void(0);" onsubmit="updateItemTodoItems()">
+                <input type="hidden" id="edit-idTodoItems">
+                <input type="hidden" id="edit-todoListId">
+                <input type="checkbox" id="edit-isCompleteTodoItems">
+                <input type="text" id="edit-nameTodoItems">
+                <input type="submit" class="btn btn-success" value="Spara">
+                <a onclick="closeInputTodoItems()" aria-label="Close">&#10006;</a>
+            </form>
+        </div>
+
+        <div id="myLists"></div>
+
+        <script src="~/js/TodoLists.js" asp-append-version="true"></script>
+        <script src="~/js/TodoItem.js" asp-append-version="true"></script>
+        <script type="text/javascript">
+            getItems();
+        </script>
+    </div>
+</div>
+
